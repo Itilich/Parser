@@ -25,19 +25,19 @@ namespace Parser.Controllers
         
         public IActionResult Appender(HomeAppenderModel model)
         {
-            var viewModel = new HomeAppenderModel()
-            {
-            };
+            //var viewModel = new HomeAppenderModel()
+            //{
+            //};
 
-            _context.addedDatas.Add(new AddedData
-            {
-                Name = model.Name,
-                LinkCersanit = model.LinkCersanit,
-                LinkVodoparad = model.LinkVodoparad,
-            });
-            _context.SaveChanges();
+            //_context.addedDatas.Add(new AddedData
+            //{
+            //    Name = model.Name,
+            //    LinkCersanit = model.LinkCersanit,
+            //    LinkVodoparad = model.LinkVodoparad,
+            //});
+            //_context.SaveChanges();
 
-            return View(viewModel);
+            return View();
         }
 
         [HttpGet]
