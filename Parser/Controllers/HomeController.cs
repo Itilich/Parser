@@ -1,12 +1,16 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Parser.Models;
+using Parser.Data;
+using Parser.Models;
 
 namespace Parser.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
+        private readonly ParserContext _context; 
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -18,10 +22,22 @@ namespace Parser.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Appender()
+        
+        public IActionResult Appender(HomeAppenderModel model)
         {
-            return View();
+            var viewModel = new HomeAppenderModel()
+            {
+            };
+
+            _context.addedDatas.Add(new AddedData
+            {
+                Name = model.Name,
+                LinkCersanit = model.LinkCersanit,
+                LinkVodoparad = model.LinkVodoparad,
+            });
+            _context.SaveChanges();
+
+            return View(viewModel);
         }
 
         [HttpGet]
