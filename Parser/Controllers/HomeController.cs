@@ -18,6 +18,16 @@ namespace Parser.Controllers
             return View();
         }
 
+        public IActionResult Appender()
+        {
+            return View();
+        }
+
+        public IActionResult DataViewer()
+        {
+            return View();
+        }
+
         public IActionResult Developers()
         {
             return View();
