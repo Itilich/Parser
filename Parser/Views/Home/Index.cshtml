@@ -8,12 +8,56 @@
     <!-- Подключение шрифта Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6, #e2e8f0);
+            color: #333;
+        }
+
+        .text-center {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        h3.display-4 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #4a5568;
+            margin: 10px 0;
+        }
+
+        button {
+            font-family: 'Montserrat', sans-serif;
+            background: #3182ce;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+            button:hover {
+                background: #2b6cb0;
+            }
+    </style>
 </head>
 <body>
     <div class="text-center">
         <h3 class="display-4">Добро пожаловать в систему сбора цен!</h3>
         <h3>Здесь вы можете сравнить цену на интересующий вас товар,</h3>
         <h3>а также добавить новые товары и сайты для отслеживания.</h3>
+        <button onclick="location.href='#'">Начать</button>
     </div>
 </body>
 </html>
