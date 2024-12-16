@@ -18,11 +18,13 @@ namespace Parser.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult Appender()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult DataViewer()
         {
             return View();
