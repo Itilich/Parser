@@ -1,1 +1,29 @@
-﻿123231323123123123123123
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение цен</title>
+
+    <!-- Подключение шрифта Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Подключение внешнего CSS -->
+    <link rel="stylesheet" href="~/css/appenderstyle.css">
+</head>
+<body>
+
+    <div class="form-container">
+        <h3>Сравнение цен</h3>
+        <form action="/compare" method="post">
+            <label for="site1">Ссылка на товар на первом сайте:</label>
+            <input type="text" id="site1" name="site1" placeholder="Введите ссылку" required>
+
+            <label for="site2">Ссылка на товар на втором сайте:</label>
+            <input type="text" id="site2" name="site2" placeholder="Введите ссылку" required>
+
+            <button type="submit">Увидеть результат</button>
+        </form>
+    </div>
+</body>
+</html>
