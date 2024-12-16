@@ -1,22 +1,58 @@
-html {
-  font-size: 14px;
-}
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
+<!-- Подключение CSS -->
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #f3f4f6, #e2e8f0);
+    color: #333;
 }
+
+.text-center {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+h3.display-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #4a5568;
+    margin: 10px 0;
+}
+
+/* Добавление стилизации кнопок (если будут) */
+button {
+    font-family: 'Montserrat', sans-serif;
+    background: #3182ce;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 20px 10px;
+}
+
+    button:hover {
+        background: #2b6cb0;
+    }
+
+/* Для адаптивности */
+@media (max-width: 768px) {
+    h3.display-4 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+}
+
+</style >
