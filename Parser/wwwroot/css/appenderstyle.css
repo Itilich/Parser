@@ -4,15 +4,18 @@
     background: linear-gradient(135deg, #f3f4f6, #e2e8f0);
     color: #333;
 }
-
+/* Стили для хедера */
 .header {
     text-align: center;
-    padding: 20px;
+    padding: 30px;
     background: #3182ce;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 30px;
 }
 
 .form-container {
@@ -64,3 +67,47 @@ button {
     button:hover {
         background: #2b6cb0;
     }
+
+/* Навигация */
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+    .navbar .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #3182ce;
+    }
+
+.navbar-toggler {
+    border: 1px solid #3182ce;
+}
+
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #3182ce;
+    }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .header {
+        font-size: 1.5rem;
+    }
+
+    .form-container {
+        padding: 20px;
+        max-width: 90%;
+        margin: 40px auto;
+    }
+}
