@@ -18,7 +18,7 @@ namespace Parser.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Developers()
         {
             return View();
         }
