@@ -12,9 +12,10 @@ namespace Parser.Controllers
 
         private readonly ParserContext _context; 
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ParserContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -22,25 +23,30 @@ namespace Parser.Controllers
             return View();
         }
 
-        
-        public IActionResult Appender(HomeAppenderModel model)
-        {
-            //var viewModel = new HomeAppenderModel()
-            //{
-            //};
-
-            //_context.addedDatas.Add(new AddedData
-            //{
-            //    Name = model.Name,
-            //    LinkCersanit = model.LinkCersanit,
-            //    LinkVodoparad = model.LinkVodoparad,
-            //});
-            //_context.SaveChanges();
-
-            return View();
+        [HttpGet]
+        public IActionResult Appender()
+        { 
+            return View(new HomeAppenderViewModel());
         }
 
-        [HttpGet]
+        [HttpPost]
+        public IActionResult Appender(HomeAppenderModel model)
+        {
+            var viewModel = new HomeAppenderViewModel()
+            { 
+            };
+            _context.addedDatas.Add(new AddedData
+            {
+                Name = model.ProductName,
+                LinkCersanit = model.LinkCersanit,
+                LinkVodoparad = model.LinkVodoparad,
+            });
+            _context.SaveChanges();
+
+            return View(viewModel);
+        }
+
+        
         public IActionResult DataViewer()
         {
             return View();
