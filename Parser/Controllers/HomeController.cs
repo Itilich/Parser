@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Parser.Models;
 using Parser.Data;
 using Parser.Models;
+using System.Text.RegularExpressions;
 
 namespace Parser.Controllers
 {
@@ -46,7 +47,48 @@ namespace Parser.Controllers
             return View(viewModel);
         }
 
-        
+        public async Task LinkDomotex(string name)
+        {
+            //'VALUE_VAT':'(....)'//    
+            string link = "";
+            var data = _context.addedDatas.FirstOrDefault(x => x.Name == name);
+            if (data != null)
+            {
+                link = data.LinkCersanit;
+            }
+            var httpClient = new HttpClient();
+            var LinkDomotex = await httpClient.GetAsync($"{link}");
+            var LinkDomotexBody = await LinkDomotex.Content.ReadAsStringAsync();
+
+            Regex regex = new Regex(@"'VALUE_VAT':'(.+)'");
+
+            //var priceExist = regex.IsMatch(LinkDomotexBody); //проверка наличия цены
+
+            var price = regex.Match(LinkDomotexBody);
+
+        }
+
+        public async Task LinkVodoparad(string name)
+        {
+            //data-price="(....)"//    
+            string link = "";
+            var data = _context.addedDatas.FirstOrDefault(x => x.Name == name);
+            if (data != null)
+            {
+                link = data.LinkVodoparad;
+            }
+            var httpClient = new HttpClient();
+            var LinkVodoparad = await httpClient.GetAsync($"{link}");
+            var LinkVodoparadBody = await LinkVodoparad.Content.ReadAsStringAsync();
+
+            Regex regex = new Regex(@"data-price=(.+)");
+
+            //var priceExist = regex.IsMatch(LinkVodoparadBody); //проверка наличия цены
+
+            var price = regex.Match(LinkVodoparadBody);
+
+        }
+
         public IActionResult DataViewer()
         {
             return View();
