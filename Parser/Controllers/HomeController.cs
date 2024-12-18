@@ -49,10 +49,10 @@ namespace Parser.Controllers
 
         public IActionResult Delete(int id)
         {
-            var variant = _context.AddedData.FirstOrDefault(x=> x.Id == id));
+            var variant = _context.addedDatas.FirstOrDefault(x=> x.Id == id);
             if (variant != null)
             {
-                _context.AddedData.Remove(variant);
+                _context.addedDatas.Remove(variant);
                 _context.SaveChanges();
 
             }

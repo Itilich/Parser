@@ -1,5 +1,4 @@
-﻿@* @model HomeAppenderModel *@
-@model List<AddedData>
+﻿@model List<AddedData>
 
 <head>
     <meta charset="UTF-8">
@@ -23,6 +22,7 @@
                 <td>@item.Name</td>
                 <td>
                     <a href="/home/calculator/@item.Id">Открыть</a>  <a href="/home/delete/@item.Id">Удалить</a>
+                </td>
             </tr>
         }
     </table>
