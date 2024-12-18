@@ -1,4 +1,6 @@
-﻿@model HomeAppenderModel
+﻿@* @model HomeAppenderModel *@
+@model List<AddedData>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,4 +9,21 @@
     <link rel="stylesheet" href="~/css/site.css">
 
 </head>
+
+
+    <table class="table table-hover">
+        <tr>
+            <th> Продукт</th>
+            <th> Действие</th>
+        </tr>
+@*         <a href="/home/calculator" class="btn btn-primary">Новый расчет</a> *@
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <a href="/home/calculator/@item.Id">Открыть</a>  <a href="/home/delete/@item.Id">Удалить</a>
+            </tr>
+        }
+    </table>
 

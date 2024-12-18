@@ -47,6 +47,22 @@ namespace Parser.Controllers
             return View(viewModel);
         }
 
+        public IActionResult Delete(int id)
+        {
+            var variant = _context.AddedData.FirstOrDefault(x=> x.Id == id));
+            if (variant != null)
+            {
+                _context.AddedData.Remove(variant);
+                _context.SaveChanges();
+
+            }
+
+
+            return RedirectToAction("Index");
+
+
+        }
+
         public async Task LinkDomotex(string name)
         {
             //'VALUE_VAT':'(....)'//    
