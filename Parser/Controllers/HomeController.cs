@@ -107,7 +107,9 @@ namespace Parser.Controllers
 
         public IActionResult DataViewer()
         {
-            return View();
+            var data = _context.addedDatas.ToList();
+            
+            return View(data);
         }
 
         public IActionResult Developers()
