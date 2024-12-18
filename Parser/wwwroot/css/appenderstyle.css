@@ -70,12 +70,14 @@ button {
 
 /* Навигация */
 .navbar {
+
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
     .navbar .navbar-brand {
+        font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         font-size: 1.5rem;
         color: #3182ce;
@@ -93,6 +95,7 @@ button {
     color: #333;
     font-size: 1rem;
     font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
 }
 
     .navbar-nav .nav-item .nav-link:hover {
@@ -103,6 +106,7 @@ button {
 @media (max-width: 768px) {
     .header {
         font-size: 1.5rem;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .form-container {
