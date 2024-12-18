@@ -76,11 +76,13 @@ namespace Parser.Controllers
             var LinkDomotex = await httpClient.GetAsync($"{link}");
             var LinkDomotexBody = await LinkDomotex.Content.ReadAsStringAsync();
 
-            Regex regex = new Regex(@"'VALUE_VAT':'(.+)'");
+            Regex regex = new Regex(@"'VALUE_VAT':'(\d+)'");
 
             //var priceExist = regex.IsMatch(LinkDomotexBody); //проверка наличия цены
 
-            var price = regex.Match(LinkDomotexBody);
+            var x = regex.Match(LinkDomotexBody);
+
+            double price = Convert.ToDouble(x.Groups[1].Value);
 
         }
 
@@ -97,11 +99,13 @@ namespace Parser.Controllers
             var LinkVodoparad = await httpClient.GetAsync($"{link}");
             var LinkVodoparadBody = await LinkVodoparad.Content.ReadAsStringAsync();
 
-            Regex regex = new Regex(@"data-price=(.+)");
+            Regex regex = new Regex(@"data-price=""(\d+)""");
 
             //var priceExist = regex.IsMatch(LinkVodoparadBody); //проверка наличия цены
 
-            var price = regex.Match(LinkVodoparadBody);
+            var x = regex.Match(LinkVodoparadBody);
+
+            double price = Convert.ToDouble(x.Groups[1].Value);
 
         }
 
@@ -110,6 +114,11 @@ namespace Parser.Controllers
             var data = _context.addedDatas.ToList();
             
             return View(data);
+        }
+
+        public IActionResult Results()
+        { 
+            return View();
         }
 
         public IActionResult Developers()
