@@ -81,9 +81,22 @@ namespace Parser.Controllers
             return View(data);
         }
 
-        public IActionResult Results()
-        { 
-            return View();
+        public IActionResult Results(ResultsViewModel model)
+        {
+            var viewModel = new ResultsViewModel();
+            {
+            };
+
+            _context.priceLogs.Add(new PriceLog
+            {
+                ProductId = model.Id,
+                DateTime = Convert.ToString(DateTime.Now),
+                //PriceDomotex = LinkParsers.LinkParser.LinkDomotex(),
+                //PriceVodoparad = LinkParsers.LinkParser.LinkVodoparad()
+            });
+            _context.SaveChanges();
+
+            return View(viewModel);
         }
 
         public IActionResult Developers()

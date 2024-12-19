@@ -2,11 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 namespace Parser.Data
 {
-    [Keyless]
     public class PriceLog
     {
+        [Key]
+        public int Id { get; set; }
         public int ProductId { get; set; }
         public string DateTime { get; set; }
-        public string Price {  get; set; }
+        public double PriceDomotex {  get; set; }
+        public double PriceVodoparad { get; set; }
+
+
     }
 }
