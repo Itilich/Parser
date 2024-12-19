@@ -64,14 +64,22 @@ namespace Parser.Controllers
 
         }
 
-        public async Task LinkDomotex(string name)
+        public async Task<IActionResult> Prices(HomeAppenderModel model, ResultsViewModel model2)
         {
-            await LinkParsers.LinkParser.LinkDomotex(_context, name);
-        }
+            var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, model.ProductName);
+            var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, model.ProductName);
 
-        public async Task LinkVodoparad(string name)
-        {
-            await LinkParsers.LinkParser.LinkVodoparad(_context, name);
+            _context.priceLogs.Add(new PriceLog
+            {
+                ProductId = model2.Id,
+                DateTime = DateTime.Now.ToString(),
+                PriceDomotex = Convert.ToDouble(priceDomotex),
+                PriceVodoparad = Convert.ToDouble(priceVodoparad)
+            });
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Results");
         }
 
         public IActionResult DataViewer()
@@ -81,20 +89,13 @@ namespace Parser.Controllers
             return View(data);
         }
 
-        public IActionResult Results(ResultsViewModel model)
+        public async Task<IActionResult> Results()
         {
-            var viewModel = new ResultsViewModel();
+           var priceLogs = _context.priceLogs.ToList();
+
+            var viewModel = new ResultsViewModel
             {
             };
-
-            _context.priceLogs.Add(new PriceLog
-            {
-                ProductId = model.Id,
-                DateTime = Convert.ToString(DateTime.Now),
-                //PriceDomotex = LinkParsers.LinkParser.LinkDomotex(),
-                //PriceVodoparad = LinkParsers.LinkParser.LinkVodoparad()
-            });
-            _context.SaveChanges();
 
             return View(viewModel);
         }

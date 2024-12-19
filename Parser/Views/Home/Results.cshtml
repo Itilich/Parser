@@ -24,7 +24,18 @@
                     <th>Ссылка на Domotex</th>
                     <th>Ссылка на Vodoparad</th>    
                 </tr>
-            </thead>      
+            </thead>  
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>@log.ProductId</td>
+                        <td>@log.DateTime</td>
+                        <td>@log.PriceDomotex</td>
+                        <td>@log.PriceVodoparad</td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </body>
