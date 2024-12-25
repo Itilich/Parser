@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сравнение цен</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="~/css/appenderstyle.css">
 </head>
 <body>
@@ -14,18 +13,17 @@
     <div class="form-container">
         <h3>Сравнение цен</h3>
         <form action="/home/appender" method="post">
-            <!-- Поле для выбора названия товара -->
+            <!-- Поле для ввода названия товара с подсказками -->
             <label for="ProductName">Название товара:</label>
-            <select id="ProductName" name="model.ProductName" required>
+            <input type="text" id="ProductName" name="model.ProductName" placeholder="Введите название товара" list="productNames" required>
+
+            <datalist id="productNames">
+                
                 @foreach (var product in ViewBag.ProductNames)
                 {
-                    <option value="@product.Name">@product.Name</option>
+                    <option value="@product.Name"></option>
                 }
-            </select>
-
-            <!-- Поле для добавления нового названия товара -->
-            <label for="ProductName">Или введите новое название:</label>
-            <input type="text" id="ProductName" name="model.ProductName" placeholder="Новое название товара">
+            </datalist>
 
             <!-- Поле для ссылки на первом сайте -->
             <label for="LinkDomotex">Ссылка на товар domotex.ru:</label>
@@ -35,8 +33,37 @@
             <label for="LinkVodoparad">Ссылка на товар vodoparad.ru:</label>
             <input type="text" id="LinkVodoparad" name="model.LinkVodoparad" placeholder="Введите ссылку" required>
 
-            <button class="btn btn-primary" name="action" onclick="location.href='/Home/DataViewer'">Добавить</button>
+            <button class="btn btn-primary" type="submit">Добавить</button>
         </form>
     </div>
+
 </body>
 </html>
+
+<style>
+    
+
+datalist#productNames {
+    max-height: 50px; /* ограничение по высоте */
+    overflow-y: auto; /* добавляем прокрутку */
+}
+
+    input[type="text"] {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var datalist = document.getElementById("productNames");
+        var options = datalist.getElementsByTagName("option");
+
+        // Ограничиваем количество отображаемых элементов до 5
+        var maxOptions = 5;
+        for (var i = options.length - 1; i >= maxOptions; i--) {
+            datalist.removeChild(options[i]);
+        }
+    });
+</script>

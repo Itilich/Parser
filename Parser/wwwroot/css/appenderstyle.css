@@ -63,6 +63,10 @@ button {
     font-size: 1rem;
     width: 100%;
 }
+input[type="text"] {
+    width: 100%;
+    box-sizing: border-box; 
+}
 
     button:hover {
         background: #2b6cb0;
@@ -114,4 +118,10 @@ button {
         max-width: 90%;
         margin: 40px auto;
     }
+}
+
+
+datalist#productNames {
+    max-height: 100px; /* ограничение по высоте */
+    overflow-y: auto; /* добавляем прокрутку */
 }
