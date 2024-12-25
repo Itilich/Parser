@@ -5,6 +5,7 @@ using Parser.Data;
 using Parser.Models;
 using System.Text.RegularExpressions;
 using LinkParsers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Parser.Controllers
 {
@@ -54,7 +55,7 @@ namespace Parser.Controllers
             {
                 ProductId = addedData.Id,
                 ProductName = addedData.Name, // Сохраняем название товара
-                DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                DateTime = DateTime.Now.ToString(),
                 PriceDomotex = priceDomotex ?? 0,
                 PriceVodoparad = priceVodoparad ?? 0,
                 LinkDomotex = addedData.LinkDomotex,
@@ -66,33 +67,47 @@ namespace Parser.Controllers
             return RedirectToAction("Results");
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var variant = _context.addedDatas.FirstOrDefault(x=> x.Id == id);
-            if (variant != null)
+            try
             {
-                _context.addedDatas.Remove(variant);
-                _context.SaveChanges();
-
+                var variant = await _context.addedDatas.FirstOrDefaultAsync(x => x.Id == id);
+                if (variant != null)
+                {
+                    _context.addedDatas.Remove(variant);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Успешно удалено: {Id}", id);
+                }
+                else
+                {
+                    _logger.LogWarning("Попытка удаления: запись с Id {Id} не найдена.", id);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при удалении записи с Id {Id}.", id);
             }
 
-
             return RedirectToAction("Index");
-
-
         }
 
-        public async Task<IActionResult> Prices(HomeAppenderModel model, ResultsViewModel model2)
+        public async Task<IActionResult> Prices(HomeAppenderModel model, int id)
         {
+            var addedData = await _context.addedDatas.FirstOrDefaultAsync(x => x.Id == id); 
+
             var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, model.ProductName);
             var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, model.ProductName);
 
             _context.priceLogs.Add(new PriceLog
             {
-                ProductId = model2.Id,
+                ProductId = addedData.Id,
+                ProductName = addedData.Name,
                 DateTime = DateTime.Now.ToString(),
                 PriceDomotex = Convert.ToDouble(priceDomotex),
-                PriceVodoparad = Convert.ToDouble(priceVodoparad)
+                PriceVodoparad = Convert.ToDouble(priceVodoparad),
+                LinkDomotex = addedData.LinkDomotex,
+                LinkVodoparad = addedData.LinkVodoparad
+
             });
 
             await _context.SaveChangesAsync();
@@ -107,11 +122,17 @@ namespace Parser.Controllers
             return View(data);
         }
 
-        public IActionResult Results()
+        public async Task<IActionResult> Results()
         {
-            var priceLogs = _context.priceLogs.ToList(); // Загружаем данные из базы
+            var priceLogs = await _context.priceLogs.ToListAsync();
 
-            return View(priceLogs); // Передаем список PriceLog в представление
+            if (!priceLogs.Any())
+            {
+                _logger.LogWarning("Данные отсутствуют в таблице PriceLog.");
+                return View("NoResults"); // Вернуть страницу "Нет данных", если нужно
+            }
+
+            return View(priceLogs);
         }
 
         public IActionResult Developers()
