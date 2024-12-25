@@ -14,9 +14,18 @@
     <div class="form-container">
         <h3>Сравнение цен</h3>
         <form action="/home/appender" method="post">
-            <!-- Поле для ввода названия товара -->
+            <!-- Поле для выбора названия товара -->
             <label for="ProductName">Название товара:</label>
-            <input type="text" id="ProductName" name="model.ProductName" placeholder="Введите название товара" required>
+            <select id="ProductName" name="model.ProductName" required>
+                @foreach (var product in ViewBag.ProductNames)
+                {
+                    <option value="@product.Name">@product.Name</option>
+                }
+            </select>
+
+            <!-- Поле для добавления нового названия товара -->
+            <label for="ProductName">Или введите новое название:</label>
+            <input type="text" id="ProductName" name="model.ProductName" placeholder="Новое название товара">
 
             <!-- Поле для ссылки на первом сайте -->
             <label for="LinkDomotex">Ссылка на товар domotex.ru:</label>
