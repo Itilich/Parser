@@ -31,24 +31,13 @@
             <label for="LinkVodoparad">Ссылка на товар vodoparad.ru:</label>
             <input type="text" id="LinkVodoparad" name="model.LinkVodoparad" placeholder="Введите ссылку" required>
 
-            <button class="btn btn-primary" type="submit">Добавить</button>
+            <button type="submit">Добавить</button>
         </form>
     </div>
 
 </body>
 </html>
 
-<style>
-    datalist#productNames {
-        max-height: 50px; /* ограничение по высоте */
-        overflow-y: auto; /* добавляем прокрутку */
-    }
-
-    input[type="text"] {
-        width: 100%;
-        box-sizing: border-box;
-    }
-</style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -73,12 +62,6 @@
             }
         });
 
-        // Ограничиваем количество отображаемых элементов в datalist до 5
-        var datalist = document.getElementById("productNames");
-        var options = datalist.getElementsByTagName("option");
-        var maxOptions = 5;
-        for (var i = options.length - 1; i >= maxOptions; i--) {
-            datalist.removeChild(options[i]);
-        }
+      
     });
 </script>
