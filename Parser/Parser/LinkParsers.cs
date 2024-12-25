@@ -50,11 +50,11 @@ namespace LinkParsers
         public static async Task<double?> LinkDomotex(ParserContext context, string name)
         {
             var data = context.addedDatas.FirstOrDefault(x => x.Name == name);
-            if (data == null || string.IsNullOrEmpty(data.LinkCersanit))
+            if (data == null || string.IsNullOrEmpty(data.LinkDomotex))
                 return null;
 
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(data.LinkCersanit);
+            var response = await httpClient.GetAsync(data.LinkDomotex);
             var responseBody = await response.Content.ReadAsStringAsync();
 
             Regex regex = new Regex(@"'VALUE_VAT':'(\d+)'");

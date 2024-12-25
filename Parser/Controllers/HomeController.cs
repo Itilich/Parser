@@ -32,20 +32,38 @@ namespace Parser.Controllers
         }
 
         [HttpPost]
-        public IActionResult Appender(HomeAppenderModel model)
+        public async Task<IActionResult> Appender(HomeAppenderModel model)
         {
-            var viewModel = new HomeAppenderViewModel()
-            { 
-            };
-            _context.addedDatas.Add(new AddedData
+            // Добавляем данные, введенные пользователем, в базу данных
+            var addedData = new AddedData
             {
                 Name = model.ProductName,
-                LinkCersanit = model.LinkCersanit,
-                LinkVodoparad = model.LinkVodoparad,
-            });
-            _context.SaveChanges();
+                LinkDomotex = model.LinkDomotex,
+                LinkVodoparad = model.LinkVodoparad
+            };
 
-            return View(viewModel);
+            _context.addedDatas.Add(addedData);
+            await _context.SaveChangesAsync();
+
+            // Парсим цены с сайтов
+            var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, model.ProductName);
+            var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, model.ProductName);
+
+            // Сохраняем результат парсинга в таблицу PriceLog
+            _context.priceLogs.Add(new PriceLog
+            {
+                ProductId = addedData.Id,
+                ProductName = addedData.Name, // Сохраняем название товара
+                DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                PriceDomotex = priceDomotex ?? 0,
+                PriceVodoparad = priceVodoparad ?? 0,
+                LinkDomotex = addedData.LinkDomotex,
+                LinkVodoparad = addedData.LinkVodoparad
+            });
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Results");
         }
 
         public IActionResult Delete(int id)
@@ -89,15 +107,11 @@ namespace Parser.Controllers
             return View(data);
         }
 
-        public async Task<IActionResult> Results()
+        public IActionResult Results()
         {
-           var priceLogs = _context.priceLogs.ToList();
+            var priceLogs = _context.priceLogs.ToList(); // Загружаем данные из базы
 
-            var viewModel = new ResultsViewModel
-            {
-            };
-
-            return View(viewModel);
+            return View(priceLogs); // Передаем список PriceLog в представление
         }
 
         public IActionResult Developers()

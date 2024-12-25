@@ -29,10 +29,19 @@
                 @foreach (var log in Model)
                 {
                     <tr>
-                        <td>@log.ProductId</td>
+                        <td>@log.ProductName</td> <!-- Выводим название товара -->
                         <td>@log.DateTime</td>
                         <td>@log.PriceDomotex</td>
                         <td>@log.PriceVodoparad</td>
+                        <td>
+                            <a href="@log.LinkDomotex" target="_blank">Открыть Domotex</a>
+                        </td>
+                        <td>
+                            <a href="@log.LinkVodoparad" target="_blank">Открыть Vodoparad</a>
+                        </td>
+                        <td>
+                            <a href="/Home/Delete/@log.ProductId" class="btn btn-danger btn-sm">Удалить</a>
+                        </td>
                     </tr>
                 }
             </tbody>
