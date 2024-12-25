@@ -28,17 +28,34 @@ namespace Parser.Controllers
 
         [HttpGet]
         public IActionResult Appender()
-        { 
+        {
+            ViewBag.ProductNames = _context.ProductNames.ToList();
+
             return View(new HomeAppenderViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Appender(HomeAppenderModel model)
         {
-            // Добавляем данные, введенные пользователем, в базу данных
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Проверяем, существует ли название товара
+            var existingProduct = await _context.ProductNames.FirstOrDefaultAsync(p => p.Name == model.ProductName);
+            if (existingProduct == null)
+            {
+                // Если название не найдено, создаём новое
+                var newProduct = new ProductName { Name = model.ProductName };
+                _context.ProductNames.Add(newProduct);
+                await _context.SaveChangesAsync();
+                existingProduct = newProduct; // Теперь это добавленное название
+            }
+
             var addedData = new AddedData
             {
-                Name = model.ProductName,
+                Name = existingProduct.Name, // Привязка к существующему или новому названию
                 LinkDomotex = model.LinkDomotex,
                 LinkVodoparad = model.LinkVodoparad
             };
@@ -46,15 +63,14 @@ namespace Parser.Controllers
             _context.addedDatas.Add(addedData);
             await _context.SaveChangesAsync();
 
-            // Парсим цены с сайтов
+            // Парсинг цен
             var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, model.ProductName);
             var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, model.ProductName);
 
-            // Сохраняем результат парсинга в таблицу PriceLog
             _context.priceLogs.Add(new PriceLog
             {
                 ProductId = addedData.Id,
-                ProductName = addedData.Name, // Сохраняем название товара
+                ProductName = addedData.Name,
                 DateTime = DateTime.Now.ToString(),
                 PriceDomotex = priceDomotex ?? 0,
                 PriceVodoparad = priceVodoparad ?? 0,
@@ -63,7 +79,6 @@ namespace Parser.Controllers
             });
 
             await _context.SaveChangesAsync();
-
             return RedirectToAction("Results");
         }
 
@@ -92,7 +107,7 @@ namespace Parser.Controllers
         }
 
         public async Task<IActionResult> Delete2(int id)
-        {
+        { 
             var variant = await _context.priceLogs.FirstOrDefaultAsync(x => x.Id == id);
             if (variant != null)
             {
@@ -105,7 +120,7 @@ namespace Parser.Controllers
                 _logger.LogWarning("Попытка удаления: запись с Id {Id} не найдена.", id);
             }
             
-            return RedirectToAction("Results");
+            return RedirectToAction("Results", new { id = variant.ProductId});
         }
 
         public async Task<IActionResult> Prices(int id)
@@ -129,7 +144,7 @@ namespace Parser.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Results");
+            return RedirectToAction("Results", new {id = id });
         }
 
         public IActionResult DataViewer()
@@ -139,14 +154,16 @@ namespace Parser.Controllers
             return View(data);
         }
 
-        public async Task<IActionResult> Results()
+        public async Task<IActionResult> Results(int id)
         {
-            var priceLogs = await _context.priceLogs.ToListAsync();
+            // Получаем список PriceLogs для определенного товара по его ID
+            var priceLogs = await _context.priceLogs
+                .Where(x => x.ProductId == id)
+                .ToListAsync();
 
             if (!priceLogs.Any())
             {
-                _logger.LogWarning("Данные отсутствуют в таблице PriceLog.");
-                return View("NoResults"); // Вернуть страницу "Нет данных", если нужно
+                _logger.LogWarning("Нет данных для товара с ID {Id}.", id);
             }
 
             return View(priceLogs);
