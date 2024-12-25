@@ -28,12 +28,12 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    [HttpPost]
     public async Task<IActionResult> Appender(HomeAppenderModel model)
     {
+        // ѕроверка валидности модели
         if (!ModelState.IsValid)
         {
-            return View(model);  // ¬озвращаем пользовател€ обратно, если модель невалидна
+            return View(model); // ¬озвращаем пользовател€ обратно, если модель невалидна
         }
 
         // ѕытаемс€ найти существующее название товара

@@ -1,5 +1,4 @@
-﻿@model HomeAppenderViewModel
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -12,13 +11,12 @@
 
     <div class="form-container">
         <h3>Сравнение цен</h3>
-        <form action="/home/appender" method="post">
+        <form id="priceForm" action="/home/appender" method="post" novalidate>
             <!-- Поле для ввода названия товара с подсказками -->
             <label for="ProductName">Название товара:</label>
             <input type="text" id="ProductName" name="model.ProductName" placeholder="Введите название товара" list="productNames" required>
 
             <datalist id="productNames">
-                
                 @foreach (var product in ViewBag.ProductNames)
                 {
                     <option value="@product.Name"></option>
@@ -41,26 +39,43 @@
 </html>
 
 <style>
-    
-
-datalist#productNames {
-    max-height: 50px; /* ограничение по высоте */
-    overflow-y: auto; /* добавляем прокрутку */
-}
+    datalist#productNames {
+        max-height: 50px; /* ограничение по высоте */
+        overflow-y: auto; /* добавляем прокрутку */
+    }
 
     input[type="text"] {
         width: 100%;
         box-sizing: border-box;
     }
-
 </style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("priceForm");
+
+        form.addEventListener("submit", function (event) {
+            var linkDomotex = document.getElementById("LinkDomotex").value;
+            var linkVodoparad = document.getElementById("LinkVodoparad").value;
+
+            // Проверка ссылки Domotex
+            if (!linkDomotex.startsWith("https://www.domotex.ru/")) {
+                alert("Ссылка на товар Domotex должна начинаться с https://www.domotex.ru/");
+                event.preventDefault(); // Останавливаем отправку формы
+                return false;
+            }
+
+            // Проверка ссылки Vodoparad
+            if (!linkVodoparad.startsWith("https://www.vodoparad.ru/")) {
+                alert("Ссылка на товар Vodoparad должна начинаться с https://www.vodoparad.ru/");
+                event.preventDefault(); // Останавливаем отправку формы
+                return false;
+            }
+        });
+
+        // Ограничиваем количество отображаемых элементов в datalist до 5
         var datalist = document.getElementById("productNames");
         var options = datalist.getElementsByTagName("option");
-
-        // Ограничиваем количество отображаемых элементов до 5
         var maxOptions = 5;
         for (var i = options.length - 1; i >= maxOptions; i--) {
             datalist.removeChild(options[i]);
