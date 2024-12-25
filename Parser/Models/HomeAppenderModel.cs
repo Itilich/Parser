@@ -8,5 +8,4 @@ namespace Parser.Models
         public string LinkDomotex { get; set; }
         public string LinkVodoparad { get; set; }
     }
-
 }

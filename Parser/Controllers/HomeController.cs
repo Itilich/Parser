@@ -35,24 +35,10 @@ namespace Parser.Controllers
         [HttpPost]
         public async Task<IActionResult> Appender(HomeAppenderModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // Проверяем, существует ли название товара
-            var existingProduct = await _context.ProductNames.FirstOrDefaultAsync(p => p.Name == model.ProductName);
-            if (existingProduct == null)
-            {
-                var newProduct = new ProductName { Name = model.ProductName };
-                _context.ProductNames.Add(newProduct);
-                await _context.SaveChangesAsync();
-                existingProduct = newProduct; // Теперь это добавленное название
-            }
-
+            // Добавляем данные, введенные пользователем, в базу данных
             var addedData = new AddedData
             {
-                Name = existingProduct.Name, // Привязка к существующему или новому названию
+                Name = model.ProductName,
                 LinkDomotex = model.LinkDomotex,
                 LinkVodoparad = model.LinkVodoparad
             };
@@ -60,14 +46,15 @@ namespace Parser.Controllers
             _context.addedDatas.Add(addedData);
             await _context.SaveChangesAsync();
 
-            // Парсинг цен
+            // Парсим цены с сайтов
             var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, model.ProductName);
             var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, model.ProductName);
 
+            // Сохраняем результат парсинга в таблицу PriceLog
             _context.priceLogs.Add(new PriceLog
             {
                 ProductId = addedData.Id,
-                ProductName = addedData.Name,
+                ProductName = addedData.Name, // Сохраняем название товара
                 DateTime = DateTime.Now.ToString(),
                 PriceDomotex = priceDomotex ?? 0,
                 PriceVodoparad = priceVodoparad ?? 0,
@@ -76,9 +63,9 @@ namespace Parser.Controllers
             });
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Results");
         }
-
 
         public async Task<IActionResult> Delete(int id)
         {
@@ -121,7 +108,6 @@ namespace Parser.Controllers
             return RedirectToAction("Results");
         }
 
-        
         public async Task<IActionResult> Prices(int id)
         {
             var addedData = await _context.addedDatas.FirstOrDefaultAsync(x => x.Id == id); 

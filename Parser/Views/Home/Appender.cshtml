@@ -13,26 +13,21 @@
 
     <div class="form-container">
         <h3>Сравнение цен</h3>
-        <form asp-action="Appender" method="post">
-    <label for="ProductName">Название товара:</label>
-    <select id="ProductName" name="ProductName">
-        <option value="" disabled selected>Выберите название товара</option>
-        @foreach (var product in ViewBag.ProductNames)
-        {
-            <option value="@product.Name">@product.Name</option>
-        }
-    </select>
+        <form action="/home/appender" method="post">
+            <!-- Поле для ввода названия товара -->
+            <label for="ProductName">Название товара:</label>
+            <input type="text" id="ProductName" name="model.ProductName" placeholder="Введите название товара" required>
 
-    <label for="LinkDomotex">Ссылка на товар domotex.ru:</label>
-    <input type="text" id="LinkDomotex" name="LinkDomotex" placeholder="Введите ссылку" required>
+            <!-- Поле для ссылки на первом сайте -->
+            <label for="LinkDomotex">Ссылка на товар domotex.ru:</label>
+            <input type="text" id="LinkDomotex" name="model.LinkDomotex" placeholder="Введите ссылку" required>
 
-    <label for="LinkVodoparad">Ссылка на товар vodoparad.ru:</label>
-    <input type="text" id="LinkVodoparad" name="LinkVodoparad" placeholder="Введите ссылку" required>
+            <!-- Поле для ссылки на втором сайте -->
+            <label for="LinkVodoparad">Ссылка на товар vodoparad.ru:</label>
+            <input type="text" id="LinkVodoparad" name="model.LinkVodoparad" placeholder="Введите ссылку" required>
 
-    <button type="submit" class="btn btn-primary">Добавить</button>
-</form>
-
+            <button class="btn btn-primary" name="action" onclick="location.href='/Home/DataViewer'">Добавить</button>
+        </form>
     </div>
 </body>
 </html>
-
