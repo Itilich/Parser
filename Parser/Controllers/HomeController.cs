@@ -91,12 +91,29 @@ namespace Parser.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Prices(HomeAppenderModel model, int id)
+        public async Task<IActionResult> Delete2(int id)
+        {
+            var variant = await _context.priceLogs.FirstOrDefaultAsync(x => x.Id == id);
+            if (variant != null)
+            {
+                _context.priceLogs.Remove(variant);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Успешно удалено: {Id}", id);
+            }
+            else
+            {
+                _logger.LogWarning("Попытка удаления: запись с Id {Id} не найдена.", id);
+            }
+            
+            return RedirectToAction("Results");
+        }
+
+        public async Task<IActionResult> Prices(int id)
         {
             var addedData = await _context.addedDatas.FirstOrDefaultAsync(x => x.Id == id); 
 
-            var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, model.ProductName);
-            var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, model.ProductName);
+            var priceDomotex = await LinkParsers.LinkParser.LinkDomotex(_context, addedData.Name);
+            var priceVodoparad = await LinkParsers.LinkParser.LinkVodoparad(_context, addedData.Name);
 
             _context.priceLogs.Add(new PriceLog
             {
